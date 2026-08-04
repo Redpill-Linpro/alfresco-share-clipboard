@@ -65,6 +65,45 @@ Deploy the two module JARs into an existing installation:
 
 Restart the webserver afterwards.
 
+## Publishing
+
+Artifacts go to the GitLab Package Registry under the `alfresco-dependency`
+group. Two endpoints are involved and they are not interchangeable:
+
+| | Endpoint | Used for |
+|---|---|---|
+| Project | `/api/v4/projects/alfresco-dependency%2Falfresco-share-clipboard/packages/maven` | Publishing (`mvn deploy`) |
+| Group | `/api/v4/groups/2746/-/packages/maven` | Resolving dependencies |
+
+The group endpoint aggregates every project below it, so a single repository
+entry in `settings.xml` covers all packages the group will ever hold. You
+publish into one project; everyone resolves from the group.
+
+**The GitLab project must exist first.** Create
+`alfresco-dependency/alfresco-share-clipboard` in GitLab — it only hosts
+packages, so it needs no source. If you name it something else, change
+`gitlab.project` in the root `pom.xml` to match.
+
+**First time setup.** Create a Personal Access Token with scopes `read_api`
+and `write_repository`, then copy the blocks from
+[`settings.xml.example`](settings.xml.example) into your `~/.m2/settings.xml`.
+Do not use a group deploy token — those return 404 against the group Maven
+endpoint, which is a known GitLab bug that presents as a missing artifact.
+
+**Publishing.**
+
+    JAVA_HOME=/usr/lib/jvm/java-21-openjdk mvn deploy
+
+The target project is set by `gitlab.project` in the root `pom.xml`, addressed
+by URL-encoded path (`%2F` is the slash). A numeric project id works there too.
+GitLab uses the same URL for releases and snapshots — the version suffix
+decides which you get. Snapshots can be overwritten; releases cannot.
+
+**Note on browsing.** Opening the Maven endpoint in a browser always returns
+`404 Not Found`, even when packages exist. It is not an index — Maven appends
+the artifact path to it. To see what is actually published, use
+`/api/v4/groups/2746/packages` or the Packages page in the GitLab UI.
+
 ## Languages
 
 The Share module ships message bundles for 18 locales — the union of what

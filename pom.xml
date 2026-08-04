@@ -35,6 +35,13 @@
     <postgres.port>5555</postgres.port>
     <!-- This parameter is only required for those cases in which ACS is not exposed in http://localhost:8080/alfresco (i.e. Windows Docker) -->
     <test.acs.endpoint.path/>
+    <!-- GitLab Package Registry. Artifacts are published to a project; consumers
+         resolve from the alfresco-dependency group endpoint, which aggregates
+         every project below it. See the Publishing section in README.md.
+         The project is addressed by URL-encoded path (%2F is the slash); a
+         numeric project id works here too if you prefer. -->
+    <gitlab.host>gitlab.redpill-linpro.com</gitlab.host>
+    <gitlab.project>alfresco-dependency%2Falfresco-share-clipboard</gitlab.project>
   </properties>
   <!-- Libs used in Unit and Integration tests -->
   <!-- IMPORTANT - Test dependencies need to be here in the top parent POM as
@@ -417,6 +424,21 @@
       </build>
     </profile>
   </profiles>
+  <!--
+        Where "mvn deploy" publishes to. GitLab uses the same URL for releases
+        and snapshots; which of the two you get is decided by the version
+        suffix. Requires a "gitlab-maven" server entry in settings.xml.
+        -->
+  <distributionManagement>
+    <repository>
+      <id>gitlab-maven</id>
+      <url>https://${gitlab.host}/api/v4/projects/${gitlab.project}/packages/maven</url>
+    </repository>
+    <snapshotRepository>
+      <id>gitlab-maven</id>
+      <url>https://${gitlab.host}/api/v4/projects/${gitlab.project}/packages/maven</url>
+    </snapshotRepository>
+  </distributionManagement>
   <!--
         Alfresco Maven Repositories
         -->
