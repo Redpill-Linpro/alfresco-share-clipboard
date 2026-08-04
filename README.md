@@ -65,6 +65,28 @@ Deploy the two module JARs into an existing installation:
 
 Restart the webserver afterwards.
 
+## Languages
+
+The Share module ships message bundles for 18 locales — the union of what
+Share, the repository and Digital Workspace support:
+
+    ar cs da de en es fi fr it ja nb nl no pl pt_BR ru sv zh_CN
+
+Share's own UI only covers `de en es fr it ja nb nl pt_BR ru zh_CN`, but the
+clipboard's strings still resolve for the remaining locales when a user's
+browser requests them, so the module is localised even where Share falls back
+to English.
+
+Bundles live in two places and both must be kept in sync when adding a key:
+
+| File | Used by |
+|---|---|
+| `alfresco/web-extension/messages/clipboard*.properties` | Document library actions and the Aikau service |
+| `.../site-webscripts/org/alfresco/components/clipboard/menu.get*.properties` | The clipboard menu in the toolbar |
+
+Files are plain ASCII with `\uXXXX` escapes, which is what `java.util.Properties`
+expects. The platform module needs no bundles — it produces no user-facing text.
+
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
