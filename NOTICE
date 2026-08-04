@@ -1,0 +1,33 @@
+Alfresco Share Clipboard
+Copyright 2012-2026 the original authors and contributors.
+
+This product is licensed under the Apache License, Version 2.0.
+See the LICENSE file for the full license text.
+
+Originally created by Florian Maul (fme AG) and released at
+https://github.com/fmaul/alfresco-share-clipboard
+
+Contributors to the original work:
+
+  Florian Maul <f.maul@fme.de>                            (fme AG)
+  Sebastien Le Marchand <sebastien.lemarchand@gmail.com>
+  Jan Pfitzner <jan@alfrescian.com>
+  Michael Mrotzek <michael.mrotzek@form4.de>              (form4 GmbH)
+  Douglas C. R. Paes <douglascrp@gmail.com>
+  Erik Billerby <billerby@gmail.com>
+
+This fork is maintained by Redpill Linpro AB (https://www.redpill-linpro.com/)
+at https://github.com/Redpill-Linpro/alfresco-share-clipboard
+
+Modifications by Redpill Linpro AB, 2026:
+
+  - Rebuilt on Alfresco SDK 4.16.0 targeting Alfresco Content Services 26.1,
+    replacing the Alfresco SDK 2.2.0 / ACS 5.1 build.
+  - Migrated from AMP module layout to JAR module layout.
+  - Migrated javax.mail and javax.activation to the jakarta.* namespace.
+  - Moved Java sources out of the org.alfresco.slingshot package into
+    com.redpill_linpro.alfresco.clipboard.
+  - Moved Surf webscript packages and the Aikau service module out of the
+    de.fmaul namespace.
+  - Changed Maven coordinates from de.fmaul:alfresco-clipboard to
+    com.redpill-linpro.alfresco:alfresco-clipboard.
