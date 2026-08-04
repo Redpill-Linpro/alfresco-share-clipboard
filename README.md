@@ -84,11 +84,17 @@ publish into one project; everyone resolves from the group.
 packages, so it needs no source. If you name it something else, change
 `gitlab.project` in the root `pom.xml` to match.
 
-**First time setup.** Create a Personal Access Token with scopes `read_api`
-and `write_repository`, then copy the blocks from
-[`settings.xml.example`](settings.xml.example) into your `~/.m2/settings.xml`.
-Do not use a group deploy token — those return 404 against the group Maven
-endpoint, which is a known GitLab bug that presents as a missing artifact.
+**First time setup.** Create a Personal Access Token with scope `api`, then
+copy the blocks from [`settings.xml.example`](settings.xml.example) into your
+`~/.m2/settings.xml`.
+
+The scope must be `api`. `write_repository` covers git push over HTTPS, not
+the package registry, and `read_api` alone only reads — a token with those two
+resolves dependencies fine and then fails on deploy with `insufficient_scope`,
+which Maven reports as a bare `400 Bad Request` with no explanation.
+
+Do not use a group deploy token either — those return 404 against the group
+Maven endpoint, a known GitLab bug that presents as a missing artifact.
 
 **Publishing.**
 

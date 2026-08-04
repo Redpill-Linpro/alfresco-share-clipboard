@@ -9,7 +9,7 @@
 
   Replace GITLAB_TOKEN_HERE with a Personal Access Token from
   https://gitlab.redpill-linpro.com/-/user_settings/personal_access_tokens
-  with scopes:  read_api  write_repository
+  with scope:  api
 
   Do NOT use a group deploy token. Those return 404 against the group-level
   Maven endpoint - it is a known GitLab bug, and the failure looks like a
