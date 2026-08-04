@@ -1,0 +1,41 @@
+<extension>
+	<modules>
+		<module>
+			<id>Alfresco Share Clipboard</id>
+			<auto-deploy>true</auto-deploy>
+			<components>
+				<component>
+					<scope>template</scope>
+					<region-id>actions-common</region-id>
+					<source-id>documentlibrary</source-id>
+					<sub-components>
+						<sub-component id="alfresco-share-clipboard-menu" index="10">
+							<url>/components/clipboard/menu</url>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>tags</region-id>
+					<source-id>documentlibrary</source-id>
+					<sub-components>
+						<sub-component id="alfresco-share-clipboard-list" index="1000">
+							<url>/components/documentlibrary/clipboard</url>
+						</sub-component>
+					</sub-components>
+				</component>
+			</components>
+			<customizations>
+					<customization>
+							<targetPackageRoot>org.alfresco.share.pages.faceted-search</targetPackageRoot>
+							<sourcePackageRoot>com.redpill_linpro.clipboard.faceted-search</sourcePackageRoot>
+					</customization>
+					<customization>
+							<targetPackageRoot>org.alfresco.components.head</targetPackageRoot>
+							<sourcePackageRoot>com.redpill_linpro.clipboard.head</sourcePackageRoot>
+					</customization>
+			</customizations>
+		</module>
+
+	</modules>
+</extension>

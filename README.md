@@ -1,8 +1,8 @@
 # Alfresco Share Clipboard
 
-[![Build Status](https://travis-ci.org/fmaul/alfresco-share-clipboard.svg?branch=master)](https://travis-ci.org/fmaul/alfresco-share-clipboard)
+This extension adds a Clipboard to the Alfresco Share document library that allows collecting documents.
 
-This extensions adds a Clipboard to the Alfresco Share document library that allows collecting documents.
+Built on Alfresco SDK 4.16.0 and targets **Alfresco Content Services 26.1**.
 
 ### Usage
 
@@ -18,24 +18,56 @@ An additional clipboard menu can be used to copy, move, link or zip the clipboar
 
 ![Clipboard menu in the toolbar](screenshots/clipboard-menu.png)
 
+## Modules
+
+| Module | Contents |
+|---|---|
+| `alfresco-clipboard-platform` | Repository webscripts (link-to, send-as-mail) and the mail webscript controller |
+| `alfresco-clipboard-share` | Share components, Surf customizations, web resources |
+| `alfresco-clipboard-platform-docker` | Docker image for the repository, used by the local environment |
+| `alfresco-clipboard-share-docker` | Docker image for Share, used by the local environment |
+| `alfresco-clipboard-integration-tests` | Integration tests run against the running containers |
+
 ## Building
 
-To build both the Repository and Share AMP files run
-  
-    mvn clean package
+Build with **JDK 21**. Newer JDKs are not supported by ACS 26.
 
-### Local development system
+    JAVA_HOME=/usr/lib/jvm/java-21-openjdk mvn clean package
 
-* Execute run script of alfresco-clipboard-repo. Alfresco repository will be startet and is accessible at `http://localhost:8080/alfresco`
-* Execute run script of alfresco-clipboard-share. Alfresco share will be startet and is accessible at `http://localhost:8081/share`
+Both modules produce JAR files. To produce AMPs instead, uncomment the
+`maven-assembly-plugin` block in the root `pom.xml`.
 
-To enable the Clipboard go to the Share Module Management Compontent and enable the Share Clipboard: `http://localhost:8081/share/page/modules/deploy`
+## Local development environment
+
+The SDK ships a Docker Compose environment covering ACS, Share, Search and PostgreSQL.
+
+    ./run.sh build_start        # build and start everything
+    ./run.sh start              # start without rebuilding
+    ./run.sh stop               # stop the containers
+    ./run.sh reload_share       # rebuild and redeploy the Share module only
+    ./run.sh reload_acs         # rebuild and redeploy the platform module only
+    ./run.sh tail               # follow the logs
+    ./run.sh purge              # remove the volumes and start clean
+
+Once started:
+
+* Alfresco repository — <http://localhost:8080/alfresco>
+* Share — <http://localhost:8180/share>
+
+The clipboard module declares `auto-deploy`, so it is active as soon as Share starts.
 
 ## Installation
 
-Build alfresco-clipboard-repo AMP and alfresco-clipboard-share AMP (see section Building). 
-* Copy alfresco-clipboard-repo to `amps` directory of your webserver instance.
-* Copy alfresco-clipboard-share to `amps_share` directory of your webserver instance.
-* Apply extension modules using the `bin/apply_amps.[sh|bat]`on your server.
-* Restart webserver
-* Enable the Clipboard: Go to the Share Module Management Compontent and enable the Share Clipboard: `http://<yourserver>/share/page/modules/deploy`
+Deploy the two module JARs into an existing installation:
+
+* `alfresco-clipboard-platform/target/alfresco-clipboard-platform-<version>.jar` into the repository webapp's `WEB-INF/lib`
+* `alfresco-clipboard-share/target/alfresco-clipboard-share-<version>.jar` into the Share webapp's `WEB-INF/lib`
+
+Restart the webserver afterwards.
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+Originally created by Florian Maul (fme AG). This fork is maintained by
+[Redpill Linpro](https://www.redpill-linpro.com/).
