@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template for ~/.m2/settings.xml, for building against and publishing to the
+  Redpill Linpro GitLab Package Registry.
+
+  Copy the blocks below into your own settings.xml. If you already have one,
+  merge them in rather than replacing the file - you probably have other
+  servers and mirrors in there already.
+
+  Replace GITLAB_TOKEN_HERE with a Personal Access Token from
+  https://gitlab.redpill-linpro.com/-/user_settings/personal_access_tokens
+  with scope:  api
+
+  Do NOT use a group deploy token. Those return 404 against the group-level
+  Maven endpoint - it is a known GitLab bug, and the failure looks like a
+  missing artifact rather than an auth error, which is why it wastes an hour.
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                              https://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <servers>
+    <!-- Publishing target. The id must match distributionManagement in pom.xml. -->
+    <server>
+      <id>gitlab-maven</id>
+      <configuration>
+        <httpHeaders>
+          <property>
+            <name>Private-Token</name>
+            <value>GITLAB_TOKEN_HERE</value>
+          </property>
+        </httpHeaders>
+      </configuration>
+    </server>
+
+    <!-- Resolution from the group endpoint. The alfresco-dependency group is
+         public, so anonymous reads work today; keep the token here anyway so
+         nothing breaks if the group is made private later. -->
+    <server>
+      <id>gitlab-alfresco-dependency</id>
+      <configuration>
+        <httpHeaders>
+          <property>
+            <name>Private-Token</name>
+            <value>GITLAB_TOKEN_HERE</value>
+          </property>
+        </httpHeaders>
+      </configuration>
+    </server>
+  </servers>
+
+  <profiles>
+    <profile>
+      <id>redpill-linpro-gitlab</id>
+      <repositories>
+        <!-- Group endpoint: aggregates every project under alfresco-dependency,
+             so one entry covers all current and future packages. Group id 2746
+             also works as the path "alfresco-dependency". -->
+        <repository>
+          <id>gitlab-alfresco-dependency</id>
+          <url>https://gitlab.redpill-linpro.com/api/v4/groups/2746/-/packages/maven</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>redpill-linpro-gitlab</activeProfile>
+  </activeProfiles>
+
+</settings>
