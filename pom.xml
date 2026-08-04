@@ -38,10 +38,11 @@
     <!-- GitLab Package Registry. Artifacts are published to a project; consumers
          resolve from the alfresco-dependency group endpoint, which aggregates
          every project below it. See the Publishing section in README.md.
-         The project is addressed by URL-encoded path (%2F is the slash); a
-         numeric project id works here too if you prefer. -->
+         Must be the numeric project id: Maven's HTTP client decodes %2F back
+         into a slash, so a URL-encoded project path turns into a route GitLab
+         answers with 400. Find the id on the project's overview page. -->
     <gitlab.host>gitlab.redpill-linpro.com</gitlab.host>
-    <gitlab.project>alfresco-dependency%2Falfresco-share-clipboard</gitlab.project>
+    <gitlab.project>3921</gitlab.project>
   </properties>
   <!-- Libs used in Unit and Integration tests -->
   <!-- IMPORTANT - Test dependencies need to be here in the top parent POM as

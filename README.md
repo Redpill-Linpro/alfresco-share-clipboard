@@ -72,7 +72,7 @@ group. Two endpoints are involved and they are not interchangeable:
 
 | | Endpoint | Used for |
 |---|---|---|
-| Project | `/api/v4/projects/alfresco-dependency%2Falfresco-share-clipboard/packages/maven` | Publishing (`mvn deploy`) |
+| Project | `/api/v4/projects/3921/packages/maven` | Publishing (`mvn deploy`) |
 | Group | `/api/v4/groups/2746/-/packages/maven` | Resolving dependencies |
 
 The group endpoint aggregates every project below it, so a single repository
@@ -100,8 +100,12 @@ Maven endpoint, a known GitLab bug that presents as a missing artifact.
 
     JAVA_HOME=/usr/lib/jvm/java-21-openjdk mvn deploy
 
-The target project is set by `gitlab.project` in the root `pom.xml`, addressed
-by URL-encoded path (`%2F` is the slash). A numeric project id works there too.
+The target project is set by `gitlab.project` in the root `pom.xml`. It must
+be the **numeric project id**, not the path: Maven's HTTP client decodes `%2F`
+back into a slash before sending, so a URL-encoded project path arrives as
+`/projects/alfresco-dependency/alfresco-share-clipboard/...` and GitLab answers
+`400 Bad Request`. The id is on the project's overview page.
+
 GitLab uses the same URL for releases and snapshots — the version suffix
 decides which you get. Snapshots can be overwritten; releases cannot.
 
